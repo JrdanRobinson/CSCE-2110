@@ -29,10 +29,6 @@ The system is being developed to support:
 - `data/` - Resource input files
 - `README.md` - Project documentation
 
-## Team Collaboration
-
-The project is maintained using GitHub. Team members contribute using their own GitHub accounts, commits, and branches. Feature branches are used to develop and integrate project components.
-
 ## Authors
 
 - Jordan Robinson
