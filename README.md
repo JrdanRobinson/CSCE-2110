@@ -1,5 +1,6 @@
-## CSCE 2110 - Project 1, Milestone 1
+# Campus Resource Reservation System
 
+## CSCE 2110 
 The Campus Resource Reservation System is a C++ program designed to manage campus resources and student reservations. Milestone 1 focuses on the core system functionality and the use of fundamental data structures.
 
 ## Milestone 1 Features
@@ -17,20 +18,23 @@ The system is being developed to support:
 
 ## Data Structures
 
-- **Vector:** Stores campus resource information
-- **Linked List:** Stores active reservations
-- **Queue:** Manages student waiting lists in FIFO order
-- **Stack:** Stores cancellation history and supports undo functionality
+- Vector: Stores campus resource information
+- Linked List: Stores active reservations
+- Queue: Manages student waiting lists in FIFO order
+- Stack: Stores cancellation history and supports undo functionality
 
-## Project Structure
+## Team Collaboration
 
-- `include/` - Header files
-- `src/` - C++ source files
-- `data/` - Resource input files
-- `README.md` - Project documentation
+The project is maintained using GitHub. Team members contribute using their own GitHub accounts, commits, and branches. Feature branches are used to develop and integrate project components.
+
+## Compilation
+
+The final Milestone 1 project will be tested on the UNT CSE CELL machines.
+
+Compilation instructions will be updated once all Milestone 1 source files have been integrated.
 
 ## Authors
 
-- Jordan Robinson
-- Paul - - - -
-- Deepsan - - - -
+- Jordan -  Documentation, GitHub management, integration and testing
+- Deepsan - Reservation management and linked list
+- Paul - Resource management and waiting list
