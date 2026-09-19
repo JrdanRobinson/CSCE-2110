@@ -18,10 +18,10 @@ The system is being developed to support:
 
 ## Data Structures
 
-- **Vector:** Stores campus resource information
-- **Linked List:** Stores active reservations
-- **Queue:** Manages student waiting lists in FIFO order
-- **Stack:** Stores cancellation history and supports undo functionality
+- Vector: Stores campus resource information
+- Linked List: Stores active reservations
+- Queue: Manages student waiting lists in FIFO order
+- Stack: Stores cancellation history and supports undo functionality
 
 ## Team Collaboration
 
