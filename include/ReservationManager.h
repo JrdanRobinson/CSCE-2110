@@ -17,10 +17,17 @@ class ReservationManager{
 
     public:
     //default constructor 
-    ReservationManager();
-    
-    //declares function to add reservation to the linked list
-    void addReservation(const Reservation& reservation);
+        ReservationManager();
+        ~ReservationManager();
+        
+        //declares function to add reservation to the linked list
+        void addReservation(const Reservation& reservation);
+
+        void displayReservations() const;
+
+        bool cancelReservation(const std::string& reservationId);
+
+        bool isReservationIdUnique(const std::string& reservationId) const;
 
 };
 #endif
