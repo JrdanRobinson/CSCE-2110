@@ -1,0 +1,21 @@
+
+LAP01,Dell Laptop,Laptop,1
+LAP02,Dell Laptop,Laptop,1
+LAP03,Dell Laptop,Laptop,1
+LAP04,Dell Laptop,Laptop,1
+LAP05,Dell Laptop,Laptop,1
+CAL01,TI-84 Calculator,Calculator,1
+CAL02,TI-84 Calculator,Calculator,1
+CAL03,TI-84 Calculator,Calculator,1
+CAL04,TI-84 Calculator,Calculator,1
+CAL05,TI-84 Calculator,Calculator,1
+MIC01,Logitech Mouse(usb),Mouse,1
+MIC02,Logitech Mouse(usb),Mouse,1
+MIC03,Logitech Mouse(usb),Mouse,1
+MIC04,Logitech Mouse(usb),Mouse,1
+MIC05,Logitech Mouse(usb),Mouse,1
+ROOM01,Study Room A,StudyRoom,1
+ROOM02,Study Room B,StudyRoom,1
+ROOM03,Study Room C,StudyRoom,1
+ROOM04,Study Room D,StudyRoom,1
+ROOM05,Study Room E,StudyRoom,1
