@@ -47,6 +47,12 @@ void ReservationManager::addReservation(const Reservation& reservation){
 void ReservationManager::displayReservations() const{
     Node* current = head;
     
+    //if the linked list is empty, display a message
+    if(current == nullptr){
+        std::cout << "No reservations found.\n" << std::endl;
+        return;
+    }
+    
     while(current != nullptr){
         std::cout << "Reservation ID: " << current->information.getReservationId() << std::endl;
         std::cout << "Student ID: " << current->information.getStudentId() << std::endl;
