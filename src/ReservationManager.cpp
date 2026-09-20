@@ -92,16 +92,37 @@ bool ReservationManager::cancelReservation(const std::string& reservationId){
     return false; // Reservation not found
 }
 
-//defines function to check if a reservation ID is unique
-bool ReservationManager::isReservationIdUnique(const std::string& reservationId) const{
+// defines function to check if a reservation ID is unique
+bool ReservationManager::isReservationIdUnique(const std::string& reservationId) const {
     Node* current = head;
-    
-    while(current != nullptr){
-        if(current->information.getReservationId() == reservationId){
+
+    while (current != nullptr) {
+        if (current->information.getReservationId() == reservationId) {
             return false; // Reservation ID is not unique
         }
+
         current = current->next;
     }
+
     return true; // Reservation ID is unique
 }
 
+
+// finds a reservation by its ID
+bool ReservationManager::findReservation(
+    const std::string& reservationId,
+    Reservation& reservation) const
+{
+    Node* current = head;
+
+    while (current != nullptr) {
+        if (current->information.getReservationId() == reservationId) {
+            reservation = current->information;
+            return true;
+        }
+
+        current = current->next;
+    }
+
+    return false;
+}
