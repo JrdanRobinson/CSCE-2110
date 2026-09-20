@@ -86,21 +86,30 @@ int main() {
             cout << "Reservation request processed." << endl;
         }
 
-        else if (choice == 4) {
+       else if (choice == 4) {
 
-            string reservationId;
+    string reservationId;
+    Reservation cancelledReservation;
 
-            cout << "Enter Reservation ID to cancel: ";
-            cin >> reservationId;
+    cout << "Enter Reservation ID to cancel: ";
+    cin >> reservationId;
 
-            if (reservationManager.cancelReservation(reservationId)) {
-                cout << "Reservation cancelled." << endl;
-            }
-            else {
-                cout << "Reservation not found." << endl;
-            }
+    // Find the reservation before deleting it
+    if (reservationManager.findReservation(reservationId, cancelledReservation)) {
+
+        // Remove it from the active reservation linked list
+        if (reservationManager.cancelReservation(reservationId)) {
+
+            // Save the cancelled reservation in the stack
+            cancellationHistory.addCancellation(cancelledReservation);
+
+            cout << "Reservation cancelled." << endl;
         }
-
+    }
+    else {
+        cout << "Reservation not found." << endl;
+    }
+}
         else if (choice == 5) {
 
             cout << "\n===== Active Reservations =====" << endl;
