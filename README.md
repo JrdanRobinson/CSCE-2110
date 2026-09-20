@@ -37,4 +37,4 @@ Compilation instructions will be updated once all Milestone 1 source files have 
 
 - Jordan -  Documentation, GitHub management, integration and testing
 - Deepsan - Reservation management and linked list
-- Paul - Resource management and waiting list
+- SEOKHYEON - Resource management and waiting list
