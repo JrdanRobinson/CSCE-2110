@@ -4,10 +4,9 @@
 #include <iostream>   // For console output
 #include <string>
 #include <vector>
-#include <map>
 using namespace std;
 
-
+// Constructor (takes values given to it and save them into this object)
 Resource::Resource(string id, string name, string type, bool avail){
     resourceID = id;
     resourceName = name;
@@ -15,7 +14,7 @@ Resource::Resource(string id, string name, string type, bool avail){
     isAvailable = avail;
 }
 
-// Getter functions
+// Getter functions (just return the value)
 string Resource::getID() { return resourceID; }
 string Resource::getName() { return resourceName; }
 string Resource::getType() { return resourceType; }
@@ -56,19 +55,20 @@ vector<Resource> loadResources(string filename){
     return resourceList;
 }
 
+// this function prints one resource's information to the screen.
 void Resource::display() {
     cout << resourceID << " | " << resourceName << " | " << resourceType
          << " | " << (isAvailable ? "Available" : "In Use") << endl;
 }
 
-// Print out the full list of resources
+// Prints every resource
 void displayAllResources(vector<Resource>& resourceList){
     for (int i = 0; i < resourceList.size(); i++){
         resourceList[i].display();
     }
 }
 
-// Print how many of each resource type are currently available
+// counts how many of each resource type are currently available, and prints.
 void showAvailabilityCount(vector<Resource>& resourceList){
     int laptopCount = 0;
     int calculatorCount = 0;
