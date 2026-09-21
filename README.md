@@ -151,7 +151,10 @@ Testing included:
 - Handling empty waiting lists
 - Displaying cancellation history
 - Compiling and running the complete integrated project on the UNT CSE CELL machines
+- 
+## GitHub Repository
 
+GitHub Repository: https://github.com/JrdanRobinson/CSCE-2110
 ## Team Collaboration
 
 The project was developed collaboratively using GitHub.
