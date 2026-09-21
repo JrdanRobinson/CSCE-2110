@@ -21,7 +21,7 @@ int main() {
 
     int choice = 0;
 
-    while (choice != 9) {
+    while (choice != 11) {
 
         cout << "\n===== Campus Resource Reservation System =====" << endl;
         cout << "1. Display All Resources" << endl;
@@ -29,13 +29,17 @@ int main() {
         cout << "3. Create Reservation" << endl;
         cout << "4. Cancel Reservation" << endl;
         cout << "5. Display Active Reservations" << endl;
-        cout << "6. Display Waiting List" << endl;
-        cout << "7. Display Cancellation History" << endl;
-        cout << "8. Undo Last Cancellation" << endl;
-        cout << "9. Exit" << endl;
+        cout << "6. Add Student to Waiting List" << endl;
+        cout << "7. Remove Next Student from Waiting List" << endl;
+        cout << "8. Display Waiting List" << endl;
+        cout << "9. Display Cancellation History" << endl;
+        cout << "10. Undo Last Cancellation" << endl;
+        cout << "11. Exit" << endl;
         cout << "Enter choice: ";
 
         cin >> choice;
+
+        // ===== RESOURCE MANAGEMENT =====
 
         if (choice == 1) {
 
@@ -48,6 +52,8 @@ int main() {
             cout << "\n===== Resource Availability =====" << endl;
             showAvailabilityCount(resources);
         }
+
+        // ===== RESERVATION MANAGEMENT =====
 
         else if (choice == 3) {
 
@@ -86,75 +92,141 @@ int main() {
             cout << "Reservation request processed." << endl;
         }
 
-       else if (choice == 4) {
+        else if (choice == 4) {
 
-    string reservationId;
-    Reservation cancelledReservation;
+            string reservationId;
+            Reservation cancelledReservation;
 
-    cout << "Enter Reservation ID to cancel: ";
-    cin >> reservationId;
+            cout << "Enter Reservation ID to cancel: ";
+            cin >> reservationId;
 
-    // Find the reservation before deleting it
-    if (reservationManager.findReservation(reservationId, cancelledReservation)) {
+            // Find the reservation before deleting it
+            if (reservationManager.findReservation(
+                    reservationId,
+                    cancelledReservation)) {
 
-        // Remove it from the active reservation linked list
-        if (reservationManager.cancelReservation(reservationId)) {
+                // Remove reservation from active linked list
+                if (reservationManager.cancelReservation(reservationId)) {
 
-            // Save the cancelled reservation in the stack
-            cancellationHistory.addCancellation(cancelledReservation);
+                    // Store cancelled reservation in stack
+                    cancellationHistory.addCancellation(
+                        cancelledReservation
+                    );
 
-            cout << "Reservation cancelled." << endl;
+                    cout << "Reservation cancelled." << endl;
+                }
+            }
+            else {
+                cout << "Reservation not found." << endl;
+            }
         }
-    }
-    else {
-        cout << "Reservation not found." << endl;
-    }
-}
+
         else if (choice == 5) {
 
             cout << "\n===== Active Reservations =====" << endl;
             reservationManager.displayReservations();
         }
 
+        // ===== WAITING LIST MANAGEMENT =====
+
         else if (choice == 6) {
+
+            string studentName;
+            string studentId;
+            string studentEmail;
+            string resourceType;
+
+            cout << "Student Name: ";
+            cin.ignore();
+            getline(cin, studentName);
+
+            cout << "Student ID: ";
+            cin >> studentId;
+
+            cout << "Student Email: ";
+            cin >> studentEmail;
+
+            cout << "Resource Type "
+                 << "(Laptop, Calculator, Mouse, StudyRoom): ";
+            cin >> resourceType;
+
+            waitRequest request(
+                studentName,
+                studentId,
+                studentEmail,
+                resourceType
+            );
+
+            waitList.addToWaitingList(request);
+
+            cout << "Student added to waiting list." << endl;
+        }
+
+        else if (choice == 7) {
 
             string resourceType;
 
-            cout << "Enter resource type (Laptop, Calculator, Mouse, StudyRoom): ";
+            cout << "Resource Type "
+                 << "(Laptop, Calculator, Mouse, StudyRoom): ";
+            cin >> resourceType;
+
+            waitRequest nextStudent("", "", "", "");
+
+            if (waitList.removeNext(resourceType, nextStudent)) {
+
+                cout << nextStudent.getName()
+                     << " removed from the waiting list."
+                     << endl;
+            }
+        }
+
+        else if (choice == 8) {
+
+            string resourceType;
+
+            cout << "Resource Type "
+                 << "(Laptop, Calculator, Mouse, StudyRoom): ";
             cin >> resourceType;
 
             waitList.displayWaitingList(resourceType);
         }
 
-        else if (choice == 7) {
+        // ===== CANCELLATION HISTORY =====
+
+        else if (choice == 9) {
 
             cout << "\n===== Cancellation History =====" << endl;
             cancellationHistory.displayCancellationHistory();
         }
 
-        else if (choice == 8) {
+        else if (choice == 10) {
 
             Reservation restoredReservation;
 
-            if (cancellationHistory.restoreLastCancellation(restoredReservation)) {
+            if (cancellationHistory.restoreLastCancellation(
+                    restoredReservation)) {
 
                 reservationManager.addReservation(restoredReservation);
 
-                cout << "Most recently cancelled reservation restored." << endl;
+                cout << "Most recently cancelled reservation restored."
+                     << endl;
             }
             else {
-                cout << "No cancelled reservations to restore." << endl;
+                cout << "No cancelled reservations to restore."
+                     << endl;
             }
         }
 
-        else if (choice == 9) {
+        // ===== EXIT =====
+
+        else if (choice == 11) {
 
             cout << "Exiting program." << endl;
         }
 
         else {
 
-            cout << "Invalid choice. Please enter 1-9." << endl;
+            cout << "Invalid choice. Please enter 1-11." << endl;
         }
     }
 
