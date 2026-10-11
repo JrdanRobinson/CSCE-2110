@@ -38,6 +38,8 @@ vector<Resource> loadResources(string filename){
 
     string line;
     while (getline(file, line)) {
+        if (!line.empty() && line.back() == '\r') line.pop_back(); // Remove a hidden space (Final revised)
+        if (line.empty()) continue; // skip blank lines(Final revised)
         stringstream newLine(line);
         string id, name, type, available;
 

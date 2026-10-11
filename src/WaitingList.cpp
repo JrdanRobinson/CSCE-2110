@@ -84,3 +84,11 @@ void waitingList::displayWaitingList(string resourceType) {
         number = number + 1;
     }
 }
+
+// return how many students are waiting for this type
+int waitingList::getCount(string resourceType) {
+    if (allLists.count(resourceType) == 0) {
+        return 0;
+    }
+    return allLists[resourceType].size();
+}

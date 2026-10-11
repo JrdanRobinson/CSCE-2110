@@ -37,6 +37,7 @@ class waitingList {
         bool removeNext(string resourceType, waitRequest& outRequest); // remove the next person in line
         void displayWaitingList(string resourceType); //show everyone waiting
         bool isEmpty(string resourceType); // check if a line has no one waiting
+        int getCount(string resourceType); // 
 
 };
 

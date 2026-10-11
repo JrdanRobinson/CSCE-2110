@@ -7,6 +7,7 @@
 #include "Reservation.h"
 #include "ReservationManager.h"
 #include "CancellationHistory.h"
+#include "WaitingListReport.h"
 
 using namespace std;
 
@@ -35,6 +36,7 @@ int main() {
         cout << "9. Display Cancellation History" << endl;
         cout << "10. Undo Last Cancellation" << endl;
         cout << "11. Exit" << endl;
+        cout << "12. Waiting-List Statistics" << endl; //Seokhyeon I added this part for the final
         cout << "Enter choice: ";
 
         cin >> choice;
@@ -298,10 +300,17 @@ int main() {
             cout << "Exiting program." << endl;
         }
 
+        else if (choice == 12) {
+            cout << "Waiting-List Statistics" << endl;
+            printWaitingStats(resources, waitList);
+        }
+
         else {
 
-            cout << "Invalid choice. Please enter 1-11." << endl;
+            cout << "Invalid choice. Please enter 1-12." << endl;
         }
+
+        
     }
 
     return 0;
