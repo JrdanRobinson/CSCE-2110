@@ -21,6 +21,7 @@ int main() {
     CancellationHistory cancellationHistory;
 
     int choice = 0;
+    int countingAuto = 1; 
 
     while (choice != 11) {
 
@@ -81,7 +82,7 @@ int main() {
             cin.ignore();
             getline(cin, studentName);
 
-            cout << "Resource ID: ";
+            cout << "Resource ID(example: LAP01, CAL03): ";
             cin >> resourceId;
 
             // Find requested resource
@@ -161,6 +162,36 @@ int main() {
                             cancelledResourceId) {
 
                             resources[i].setAvailable(true);
+
+                                                        // [Auto-assign] Is anyone waiting for this resource?
+                            if (waitList.isEmpty(cancelledResourceId) == false) {
+
+                                // Take the first person out of the waiting line
+                                waitRequest nextStudent("", "", "", "");
+                                waitList.removeNext(cancelledResourceId, nextStudent);
+
+                                // Make a new reservation ID for this person
+                                string newId = "AUTO" + to_string(countingAuto);
+                                countingAuto = countingAuto + 1;
+
+                                // Create the new reservation for this person
+                                Reservation newReservation(
+                                    newId,
+                                    nextStudent.getId(),
+                                    nextStudent.getName(),
+                                    cancelledResourceId,
+                                    "Auto-Assigned"
+                                );
+                                reservationManager.addReservation(newReservation);
+
+                                // The resource is in use again
+                                resources[i].setAvailable(false);
+
+                                cout << nextStudent.getName() << " now has "
+                                     << cancelledResourceId << " (Reservation ID: "
+                                     << newId << ")." << endl;
+                            }
+
                             break;
                         }
                     }
