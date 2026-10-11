@@ -38,6 +38,7 @@ int main() {
         cout << "10. Undo Last Cancellation" << endl;
         cout << "11. Exit" << endl;
         cout << "12. Waiting-List Statistics" << endl; //Seokhyeon I added this part for the final
+        cout << "13. Resource Utilization" << endl; //Seokhyeon I added this part for the final
         cout << "Enter choice: ";
 
         cin >> choice;
@@ -163,7 +164,7 @@ int main() {
 
                             resources[i].setAvailable(true);
 
-                                                        // [Auto-assign] Is anyone waiting for this resource?
+                            // [Auto-assign] Is anyone waiting for this resource?
                             if (waitList.isEmpty(cancelledResourceId) == false) {
 
                                 // Take the first person out of the waiting line
@@ -346,6 +347,11 @@ int main() {
             printWaitingStats(resources, waitList);
         }
 
+        else if (choice == 13) {
+            cout << "Resource Utilization" << endl;
+            printUtilization(resources, reservationManager);
+        }
+        
         else {
 
             cout << "Invalid choice. Please enter 1-12." << endl;
