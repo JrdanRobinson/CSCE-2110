@@ -12,10 +12,9 @@ void printWaitingStats(vector<Resource>& resources, waitingList& waitList) {
         // get id, name, and type from resources
         string id = resources[i].getID();
         string name = resources[i].getName();
-        string type = resources[i].getType();
         
-        // count the stduents are waiting for those type
-        int count = waitList.getCount(type);
+        // each resource has its own waiting line, so ask by Id
+        int count = waitList.getCount(id);
 
         cout << id << " | "<< name << " | " << count <<endl;
     }

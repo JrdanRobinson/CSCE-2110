@@ -188,8 +188,33 @@ int main() {
             string studentName;
             string studentId;
             string studentEmail;
-            string resourceType;
+            string resourceId;
 
+            cout << "Resource ID (example: LAP01): ";
+            cin >> resourceId;
+
+            // Find the resource
+            Resource* selectedResource = nullptr;
+            for (int i = 0; i < resources.size(); i++) {
+                if (resources[i].getID() == resourceId) {
+                    selectedResource = &resources[i];
+                    break;
+                }
+            }
+
+            // Reject an ID that does not exist
+            if (selectedResource == nullptr) {
+                cout << "Error: Resource ID does not exist." << endl;
+                continue;
+            }
+
+            // Reject if the resource is free (no need to wait)
+            if (selectedResource->isItAvailable()) {
+                cout << "This resource is available. Please use option 3 to reserve it." << endl;
+                continue;
+            }
+
+            // Only now ask for the student's information
             cout << "Student Name: ";
             cin.ignore();
             getline(cin, studentName);
@@ -200,18 +225,7 @@ int main() {
             cout << "Student Email: ";
             cin >> studentEmail;
 
-            cout << "Resource Type "
-                 << "(Laptop, Calculator, Mouse, StudyRoom): ";
-
-            cin >> resourceType;
-
-            waitRequest request(
-                studentName,
-                studentId,
-                studentEmail,
-                resourceType
-            );
-
+            waitRequest request(studentName, studentId, studentEmail, resourceId);
             waitList.addToWaitingList(request);
 
             cout << "Student added to waiting list." << endl;
@@ -219,16 +233,14 @@ int main() {
 
         else if (choice == 7) {
 
-            string resourceType;
+            string resourceId;
 
-            cout << "Resource Type "
-                 << "(Laptop, Calculator, Mouse, StudyRoom): ";
-
-            cin >> resourceType;
+            cout << "Resource ID (example: LAP01): ";
+            cin >> resourceId;
 
             waitRequest nextStudent("", "", "", "");
 
-            if (waitList.removeNext(resourceType, nextStudent)) {
+            if (waitList.removeNext(resourceId, nextStudent)) {
 
                 cout << nextStudent.getName()
                      << " removed from the waiting list."
@@ -238,14 +250,12 @@ int main() {
 
         else if (choice == 8) {
 
-            string resourceType;
+            string resourceId;
 
-            cout << "Resource Type "
-                 << "(Laptop, Calculator, Mouse, StudyRoom): ";
+            cout << "Resource ID (example: LAP01): ";
+            cin >> resourceId;
 
-            cin >> resourceType;
-
-            waitList.displayWaitingList(resourceType);
+            waitList.displayWaitingList(resourceId);
         }
 
         // CANCELLATION HISTORY 
