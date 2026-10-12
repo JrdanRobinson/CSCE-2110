@@ -68,3 +68,11 @@ void CancellationHistory::displayCancellationHistory() {
 bool CancellationHistory::isEmpty() {
     return cancelledReservations.empty();
 }
+bool CancellationHistory::peekLastCancellation(Reservation& reservation) {
+    if (cancelledReservations.empty()) {
+        return false;
+    }
+
+    reservation = cancelledReservations.top();
+    return true;
+}

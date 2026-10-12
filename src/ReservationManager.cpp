@@ -155,3 +155,21 @@ bool ReservationManager::findReservation(
 
     return false;
 }
+
+// Count the reservations that belong to one resource
+int ReservationManager::countReservationsFor(const std::string& resourceId) const {
+
+    int count = 0;        // how many we found so far
+    Node* node = head;    // start at the first reservation
+
+    while (node != nullptr) {                  // repeat until the list ends
+
+        if (node->information.getResourceId() == resourceId) {
+            count = count + 1;                 // this one matches, so add 1
+        }
+
+        node = node->next;                     // go to the next reservation
+    }
+
+    return count;
+}

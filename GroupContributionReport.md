@@ -1,9 +1,9 @@
-# Milestone 1 Group Contribution Report
+# Final Project Group Contribution Report
 
 ## Campus Resource Reservation System
 ### CSCE 2110
 
-This report describes the individual contributions made by each team member during Milestone 1 of the Campus Resource Reservation System.
+This report describes the individual contributions made by each team member during the final development of the Campus Resource Reservation System.
 
 ## Contribution Summary
 
@@ -32,3 +32,9 @@ The reservation manager uses a linked list to store active reservation records. 
 SEOKHYEON worked primarily on resource management and waiting-list management. SEOKHYEON implemented the Resource class and functionality for loading resource information from `data/resources.txt`, storing resources, displaying resource information, and reporting resource availability.
 
 SEOKHYEON also implemented the waiting-list component using queues. The waiting-list implementation supports adding students to the appropriate resource waiting list, removing the next student in FIFO order, displaying students currently waiting, and checking whether a waiting list is empty. These components were developed separately and later integrated into the complete program. SEOKHYEON contributed the resource and waiting-list implementation through GitHub branches and commits.
+
+## Final Integration and Testing
+
+During final integration, Jordan merged the team's project components and incorporated the resource search, sorting, and reporting functionality. The completed system includes linear search by resource ID, merge sort by resource name, active reservation reporting, resource utilization statistics, waiting-list statistics, and a most-requested-resources report.
+
+Jordan also tested the integrated system on UNT CSE CELL, including successful reservation creation, cancellation, restoration, waiting-list requests, report counters, and protection against restoring a reservation when its resource is already occupied. The final integration work included debugging menu exit behavior and updating cancellation restoration validation.

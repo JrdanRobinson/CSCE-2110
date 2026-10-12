@@ -76,7 +76,7 @@ The project uses C++17 and has been compiled and tested successfully on the UNT 
 From the root project directory, compile the complete program using:
 
 ```bash
-g++ -std=c++17 src/main.cpp src/Resource.cpp src/WaitingList.cpp src/Reservation.cpp src/ReservationManager.cpp src/CancellationHistory.cpp -Iinclude -o program
+g++ -std=c++17 src/main.cpp src/Resource.cpp src/WaitingList.cpp src/Reservation.cpp src/ReservationManager.cpp src/CancellationHistory.cpp src/WaitingListReport.cpp -Iinclude -o program
 ```
 
 Run the program using:
@@ -216,3 +216,42 @@ The final integrated version combines resource management, reservation managemen
 - Jordan
 - Deepsan
 - SEOKHYEON
+
+## Final Project Features
+
+The completed system provides 16 menu options:
+
+1. Display All Resources
+2. Display Resource Availability
+3. Create Reservation
+4. Cancel Reservation
+5. Display Active Reservations
+6. Add Student to Waiting List
+7. Remove Next Student from Waiting List
+8. Display Waiting List
+9. Display Cancellation History
+10. Undo Last Cancellation
+11. Search Resource by ID
+12. Sort Resources by Name
+13. Waiting-List Statistics
+14. Resource Utilization
+15. Most Requested Resources
+16. Exit
+
+### Searching and Sorting
+
+- Linear search locates resources by ID with O(n) time complexity.
+- Merge sort organizes resources alphabetically by name with O(n log n) time complexity.
+
+### Reporting
+
+- Active Reservations: Displays currently active reservations.
+- Resource Utilization: Displays the number of active reservations for each resource.
+- Waiting-List Statistics: Displays the number of waiting students for each resource.
+- Most Requested Resources: Ranks resources by successful reservation and waiting-list request counts.
+
+Request counts are maintained during program execution and reset when the program restarts.
+
+### Cancellation Safety
+
+The system stores cancelled reservations using a stack. Undo restores the most recent cancellation only when its resource is available and its reservation ID is not already in use.

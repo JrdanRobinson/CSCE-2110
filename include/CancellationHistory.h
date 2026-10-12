@@ -24,6 +24,7 @@ public:
 
     // Checks if there are any cancelled reservations
     bool isEmpty();
+    bool peekLastCancellation(Reservation& reservation);
 };
 
 #endif

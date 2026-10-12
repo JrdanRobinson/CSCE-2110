@@ -13,6 +13,7 @@ Resource::Resource(string id, string name, string type, bool avail) {
     resourceName = name;
     resourceType = type;
     isAvailable = avail;
+requestCount = 0;
 }
 
 // Getter functions
@@ -20,7 +21,13 @@ string Resource::getID() { return resourceID; }
 string Resource::getName() { return resourceName; }
 string Resource::getType() { return resourceType; }
 bool Resource::isItAvailable() { return isAvailable; }
+void Resource::incrementRequestCount() {
+    requestCount++;
+}
 
+int Resource::getRequestCount() {
+    return requestCount;
+}
 // Update availability status
 void Resource::setAvailable(bool status) {
     isAvailable = status;
@@ -39,6 +46,8 @@ vector<Resource> loadResources(string filename) {
     string line;
 
     while (getline(file, line)) {
+        if (!line.empty() && line.back() == '\r') line.pop_back(); // Remove a hidden space (Final revised)
+        if (line.empty()) continue; // skip blank lines(Final revised)
         stringstream newLine(line);
         string id, name, type, available;
 
