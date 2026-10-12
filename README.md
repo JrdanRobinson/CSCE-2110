@@ -6,7 +6,7 @@ The Campus Resource Reservation System is a C++ program designed to manage campu
 
 The project was developed collaboratively using GitHub feature branches, commits, and pull requests.
 
-## Milestone 1 Features
+## Core Features
 
 The system supports:
 
@@ -48,7 +48,10 @@ The project uses several data structures to manage different parts of the system
 - `ComplexityAnalysis.md` - Big-O complexity analysis for the required operations
 - `testReservation.cpp` - Reservation and linked-list testing
 - `testCancellation.cpp` - Cancellation-history and stack testing
-- `README.md` - Project documentation
+- `README.md` - Project overview and build instructions
+- `UserGuide.md` - Instructions for using the system
+- `GroupContributionReport.md` - Individual team contributions
+- `GitHubURL.txt` - Repository branch URL
 
 ## Resource File Format
 
@@ -99,7 +102,12 @@ The integrated program provides the following options:
 8. Display Waiting List
 9. Display Cancellation History
 10. Undo Last Cancellation
-11. Exit
+11. Search Resource by ID
+12. Sort Resources by Name
+13. Waiting-List Statistics
+14. Resource Utilization
+15. Most Requested Resources
+16. Exit
 
 ## Validation
 
@@ -110,8 +118,9 @@ The program:
 - Prevents duplicate reservation IDs
 - Checks whether a requested resource ID exists
 - Checks whether the requested resource is currently available
+- Validates manually entered reservation dates, including month lengths and leap years
 - Marks a resource as unavailable after it is reserved
-- Marks the resource as available after its reservation is cancelled
+- Frees a resource after cancellation and automatically assigns it to the next waiting student, if one exists
 - Marks the resource as unavailable again if a cancellation is undone
 - Reports when a requested reservation cannot be found
 - Handles empty waiting lists and empty cancellation history
@@ -125,7 +134,11 @@ The analysis discusses:
 - Reservation insertion
 - Reservation removal
 - Waiting-list processing
-- Undo cancellation
+- Undo cancellation and cancellation history
+- Manually implemented linear search and merge sort
+- Active reservations, waiting-list statistics, utilization, and popularity reports
+
+The analysis distinguishes individual queue/stack operations from complete workflows, including map lookups and linked-list traversals.
 
 Big-O notation and explanations are provided based on the data structures and algorithms used in the project.
 
@@ -151,10 +164,27 @@ Testing included:
 - Handling empty waiting lists
 - Displaying cancellation history
 - Compiling and running the complete integrated project on the UNT CSE CELL machines
-- 
+
+### Running the Included Component Tests
+
+Compile and run each test separately from the project root:
+
+```bash
+g++ -std=c++17 testReservation.cpp src/Reservation.cpp src/ReservationManager.cpp -Iinclude -o testReservation
+./testReservation
+
+g++ -std=c++17 testCancellation.cpp src/Reservation.cpp src/CancellationHistory.cpp -Iinclude -o testCancellation
+./testCancellation
+```
+
+These tests print results for manual inspection. They cover reservation-list and cancellation-stack operations; they do not automatically verify the complete menu, search, sorting, or reports.
+
 ## GitHub Repository
 
 GitHub Repository: https://github.com/JrdanRobinson/CSCE-2110
+
+Branch URL recorded in `GitHubURL.txt`: https://github.com/JrdanRobinson/CSCE-2110/tree/feature/final-integration
+
 ## Team Collaboration
 
 The project was developed collaboratively using GitHub.
@@ -217,31 +247,14 @@ The final integrated version combines resource management, reservation managemen
 - Deepsan
 - SEOKHYEON
 
-## Final Project Features
-
-The completed system provides 16 menu options:
-
-1. Display All Resources
-2. Display Resource Availability
-3. Create Reservation
-4. Cancel Reservation
-5. Display Active Reservations
-6. Add Student to Waiting List
-7. Remove Next Student from Waiting List
-8. Display Waiting List
-9. Display Cancellation History
-10. Undo Last Cancellation
-11. Search Resource by ID
-12. Sort Resources by Name
-13. Waiting-List Statistics
-14. Resource Utilization
-15. Most Requested Resources
-16. Exit
+## Searching, Sorting, and Reporting
 
 ### Searching and Sorting
 
-- Linear search locates resources by ID with O(n) time complexity.
-- Merge sort organizes resources alphabetically by name with O(n log n) time complexity.
+- Manually implemented linear search locates resources by ID in O(R) time and does not require sorted data.
+- Manually implemented merge sort organizes resources alphabetically by name in O(R log R) time with O(R) extra space.
+
+R is the number of resources. Neither feature uses a library function to perform its required search or sort.
 
 ### Reporting
 
@@ -250,7 +263,9 @@ The completed system provides 16 menu options:
 - Waiting-List Statistics: Displays the number of waiting students for each resource.
 - Most Requested Resources: Ranks resources by successful reservation and waiting-list request counts.
 
-Request counts are maintained during program execution and reset when the program restarts.
+Request counts are maintained during program execution and reset when the program restarts. Automatic waiting-list promotion and undo do not count the same request again. The most-requested report ranks resources with a separate O(R²) nested-loop algorithm.
+
+Reservations, waiting lists, cancellation history, and availability changes also remain in memory only; they are not saved on exit. Automatically assigned reservations display `Auto-Assigned` in the date field.
 
 ### Cancellation Safety
 
