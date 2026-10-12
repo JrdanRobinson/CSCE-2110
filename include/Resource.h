@@ -40,8 +40,10 @@ void displayAllResources(vector<Resource>& resourceList);
 // Display available resource counts
 void showAvailabilityCount(vector<Resource>& resourceList);
 
-// NEW: Search resources by ID using Linear Search
-// Returns the index if found, or -1 if not found
+// Linear Search: returns index if found, -1 otherwise
 int linearSearchResource(vector<Resource>& resourceList, string resourceID);
+
+// Merge Sort: sorts resources alphabetically by name
+void mergeSortResources(vector<Resource>& resourceList, int left, int right);
 
 #endif
