@@ -43,6 +43,7 @@ int main() {
 	cout << "14. Resource Utilization" << endl;
 	cout << "15. Most Requested Resources" << endl;
 	cout << "16. Exit" << endl;
+	cout << "\nEnter your choice (1-16): ";
         if (!(cin >> choice)) {
             if (cin.eof()) {
                 break;
@@ -108,11 +109,60 @@ int main() {
                 cout << "Error: Resource is currently unavailable." << endl;
                 continue;
             }
+		cout << "Reservation Date (YYYY-MM-DD): ";
+cin >> reservationDate;
 
-            cout << "Reservation Date: ";
-            cin >> reservationDate;
+bool validDate = true;
 
-            Reservation reservation(
+if (reservationDate.length() != 10 ||
+    reservationDate[4] != '-' ||
+    reservationDate[7] != '-') {
+    validDate = false;
+}
+else {
+    for (int i = 0; i < 10; i++) {
+        if (i == 4 || i == 7) {
+            continue;
+        }
+
+        if (reservationDate[i] < '0' || reservationDate[i] > '9') {
+            validDate = false;
+            break;
+        }
+    }
+}
+
+if (validDate) {
+    int year = stoi(reservationDate.substr(0, 4));
+    int month = stoi(reservationDate.substr(5, 2));
+    int day = stoi(reservationDate.substr(8, 2));
+
+    int daysInMonth[] = {
+        31, 28, 31, 30, 31, 30,
+        31, 31, 30, 31, 30, 31
+    };
+
+    bool leapYear =
+        (year % 400 == 0) ||
+        (year % 4 == 0 && year % 100 != 0);
+
+    if (leapYear) {
+        daysInMonth[1] = 29;
+    }
+
+    if (year < 1 || month < 1 || month > 12) {
+        validDate = false;
+    }
+    else if (day < 1 || day > daysInMonth[month - 1]) {
+        validDate = false;
+    }
+}
+
+if (!validDate) {
+    cout << "Error: Invalid date. Use YYYY-MM-DD." << endl;
+    continue;
+}
+             Reservation reservation(
                 reservationId,
                 studentId,
                 studentName,
