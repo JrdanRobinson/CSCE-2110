@@ -35,6 +35,8 @@ SEOKHYEON also implemented the waiting-list component using queues. The waiting-
 
 ## Final Integration and Testing
 
-During final integration, Jordan merged the team's project components and incorporated the resource search, sorting, and reporting functionality. The completed system includes linear search by resource ID, merge sort by resource name, active reservation reporting, resource utilization statistics, waiting-list statistics, and a most-requested-resources report.
+During final integration, Jordan merged the team's components and incorporated searching, sorting, and reporting functionality. The completed system includes manually implemented linear search by resource ID, merge sort by resource name, active reservation reporting, resource utilization statistics, waiting-list statistics, and a most-requested-resources report.
 
-Jordan also tested the integrated system on UNT CSE CELL, including successful reservation creation, cancellation, restoration, waiting-list requests, report counters, and protection against restoring a reservation when its resource is already occupied. The final integration work included debugging menu exit behavior and updating cancellation restoration validation.
+Jordan also improved reservation validation by adding date-format and calendar-date checks, preventing double booking during cancellation restoration, and connecting the waiting-list queue to reservation cancellations. When a resource is cancelled and students are waiting, the system automatically assigns the resource to the next student in FIFO order.
+
+Final testing on UNT CSE CELL included reservation creation, cancellation, restoration, invalid date rejection, waiting-list processing, request counters, resource availability, and prevention of conflicting reservations. Jordan also corrected menu navigation and input-prompt behavior and updated project documentation for the final submission.
