@@ -28,6 +28,7 @@ class ReservationManager{
         bool cancelReservation(const std::string& reservationId);
         bool findReservation(const std::string& reservationId, Reservation& reservation) const;
         bool isReservationIdUnique(const std::string& reservationId) const;
+        int countReservationsFor(const std::string& resourceId) const;
 
 };
 #endif

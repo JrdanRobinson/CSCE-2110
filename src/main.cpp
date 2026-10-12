@@ -2,12 +2,14 @@
 #include <string>
 #include <vector>
 #include <limits>
-
+#include "CancellationHistory.h"
 #include "Resource.h"
 #include "WaitingList.h"
 #include "Reservation.h"
 #include "ReservationManager.h"
 #include "CancellationHistory.h"
+#include "WaitingListReport.h"
+
 
 using namespace std;
 
@@ -22,7 +24,7 @@ int main() {
 
     int choice = 0;
 
-    while (choice != 13) {
+    while (choice != 15) {
 
         cout << "\n===== Campus Resource Reservation System =====" << endl;
         cout << "1. Display All Resources" << endl;
@@ -37,7 +39,9 @@ int main() {
         cout << "10. Undo Last Cancellation" << endl;
         cout << "11. Search Resource by ID" << endl;
         cout << "12. Sort Resources by Name" << endl;
-        cout << "13. Exit" << endl;
+        cout << "13. Waiting-List Statistics" << endl;
+	cout << "14. Resource Utilization" << endl;
+        cout << "15. Exit" << endl;
         cout << "Enter choice: ";
 
         if (!(cin >> choice)) {
@@ -163,67 +167,66 @@ int main() {
         }
 
         // WAITING LIST MANAGEMENT
+	else if (choice == 6) {
 
-        else if (choice == 6) {
+    string resourceId;
 
-            string studentName;
-            string studentId;
-            string studentEmail;
-            string resourceType;
+    cout << "Resource ID (example: LAP01): ";
+    cin >> resourceId;
 
-            cout << "Student Name: ";
-            cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            getline(cin, studentName);
+    int resourceIndex = linearSearchResource(resources, resourceId);
 
-            cout << "Student ID: ";
-            cin >> studentId;
+    if (resourceIndex == -1) {
+        cout << "Error: Resource ID does not exist." << endl;
+        continue;
+    }
 
-            cout << "Student Email: ";
-            cin >> studentEmail;
+    if (resources[resourceIndex].isItAvailable()) {
+        cout << "This resource is available. Please reserve it instead." << endl;
+        continue;
+    }
 
-            cout << "Resource Type "
-                 << "(Laptop, Calculator, Mouse, StudyRoom): ";
-            cin >> resourceType;
+    string studentName, studentId, studentEmail;
 
-            waitRequest request(
-                studentName,
-                studentId,
-                studentEmail,
-                resourceType
-            );
+    cout << "Student Name: ";
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    getline(cin, studentName);
 
-            waitList.addToWaitingList(request);
+    cout << "Student ID: ";
+    cin >> studentId;
 
-            cout << "Student added to waiting list." << endl;
-        }
+    cout << "Student Email: ";
+    cin >> studentEmail;
 
-        else if (choice == 7) {
+    waitRequest request(studentName, studentId, studentEmail, resourceId);
+    waitList.addToWaitingList(request);
 
-            string resourceType;
+    cout << "Student added to waiting list." << endl;
+}
 
-            cout << "Resource Type "
-                 << "(Laptop, Calculator, Mouse, StudyRoom): ";
-            cin >> resourceType;
+	else if (choice == 7) {
 
-            waitRequest nextStudent("", "", "", "");
+    string resourceId;
 
-            if (waitList.removeNext(resourceType, nextStudent)) {
-                cout << nextStudent.getName()
-                     << " removed from the waiting list." << endl;
-            }
-        }
+    cout << "Resource ID (example: LAP01): ";
+    cin >> resourceId;
 
-        else if (choice == 8) {
+    waitRequest nextStudent("", "", "", "");
 
-            string resourceType;
+    if (waitList.removeNext(resourceId, nextStudent)) {
+        cout << nextStudent.getName()
+             << " removed from the waiting list." << endl;
+    }
+}
+	else if (choice == 8) {
 
-            cout << "Resource Type "
-                 << "(Laptop, Calculator, Mouse, StudyRoom): ";
-            cin >> resourceType;
+    string resourceId;
 
-            waitList.displayWaitingList(resourceType);
-        }
+    cout << "Resource ID (example: LAP01): ";
+    cin >> resourceId;
 
+    waitList.displayWaitingList(resourceId);
+}
         // CANCELLATION HISTORY
 
         else if (choice == 9) {
@@ -300,12 +303,28 @@ int main() {
 
         // EXIT
 
-        else if (choice == 13) {
-            cout << "Exiting program." << endl;
-        }
+       // WAITING-LIST STATISTICS
+
+	else if (choice == 13) {
+    	cout << "\n===== Waiting-List Statistics =====" << endl;
+    	printWaitingStats(resources, waitList);
+}
+
+	// RESOURCE UTILIZATION
+
+	else if (choice == 14) {
+    	cout << "\n===== Resource Utilization =====" << endl;
+    	printUtilization(resources, reservationManager);
+}
+
+	// EXIT
+
+	else if (choice == 15) {
+    	cout << "Exiting program." << endl;
+}
 
         else {
-            cout << "Invalid choice. Please enter 1-13." << endl;
+            cout << "Invalid choice. Please enter 1-15." << endl;
         }
     }
 

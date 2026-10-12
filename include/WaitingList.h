@@ -15,15 +15,15 @@ class waitRequest {
     string waitRequestName;  //student's name
     string waitRequestStudentId; //student's ID number
     string waitRequestEmail; //student's email
-    string resourceType;  // what type of resource they are waiting for 
+    string resourceId;  // which resource( by Id) they are waiting for 
  
 
    public: 
-    waitRequest(string name, string studentId, string studentEmail, string resType);
+    waitRequest(string name, string studentId, string studentEmail, string resId);
     string getName();
     string getId();
     string getEmail();
-    string getResourceType();
+    string getResourceId();
 };
 
 // manages all the waiting lines, one line per resource
@@ -34,9 +34,10 @@ class waitingList {
 
     public:
         void addToWaitingList(waitRequest request);  // add a person to the correct line
-        bool removeNext(string resourceType, waitRequest& outRequest); // remove the next person in line
-        void displayWaitingList(string resourceType); //show everyone waiting
-        bool isEmpty(string resourceType); // check if a line has no one waiting
+        bool removeNext(string resourceId, waitRequest& outRequest); // remove the next person in line
+        void displayWaitingList(string resourceId); //show everyone waiting
+        bool isEmpty(string resourceId); // check if a line has no one waiting
+        int getCount(string resourceId); //  how many student or people are waiting for this resource
 
 };
 
