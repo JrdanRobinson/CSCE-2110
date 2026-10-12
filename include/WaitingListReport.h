@@ -11,4 +11,6 @@ using namespace std;
 void printWaitingStats(vector<Resource>& resources, waitingList& waitList);
 // Prints every resource 
 void printUtilization(vector<Resource>& resources, ReservationManager& manager);
+void printMostRequested(vector<Resource>& resources);
 #endif
+

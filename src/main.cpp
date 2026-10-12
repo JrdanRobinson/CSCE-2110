@@ -24,7 +24,7 @@ int main() {
 
     int choice = 0;
 
-    while (choice != 15) {
+    while (choice != 16) {
 
         cout << "\n===== Campus Resource Reservation System =====" << endl;
         cout << "1. Display All Resources" << endl;
@@ -41,9 +41,8 @@ int main() {
         cout << "12. Sort Resources by Name" << endl;
         cout << "13. Waiting-List Statistics" << endl;
 	cout << "14. Resource Utilization" << endl;
-        cout << "15. Exit" << endl;
-        cout << "Enter choice: ";
-
+	cout << "15. Most Requested Resources" << endl;
+	cout << "16. Exit" << endl;
         if (!(cin >> choice)) {
             if (cin.eof()) {
                 break;
@@ -120,11 +119,12 @@ int main() {
                 resourceId,
                 reservationDate
             );
+reservationManager.addReservation(reservation);
+resources[resourceIndex].setAvailable(false);
+resources[resourceIndex].incrementRequestCount();
 
-            reservationManager.addReservation(reservation);
-            resources[resourceIndex].setAvailable(false);
+cout << "Reservation created successfully." << endl;	
 
-            cout << "Reservation created successfully." << endl;
         }
 
         else if (choice == 4) {
@@ -199,9 +199,10 @@ int main() {
     cin >> studentEmail;
 
     waitRequest request(studentName, studentId, studentEmail, resourceId);
-    waitList.addToWaitingList(request);
+waitList.addToWaitingList(request);
+resources[resourceIndex].incrementRequestCount();
 
-    cout << "Student added to waiting list." << endl;
+cout << "Student added to waiting list." << endl;
 }
 
 	else if (choice == 7) {
@@ -237,30 +238,41 @@ int main() {
 
         else if (choice == 10) {
 
-            Reservation restoredReservation;
+    Reservation restoredReservation;
 
-            if (cancellationHistory.restoreLastCancellation(
-                    restoredReservation)) {
+    // Look at the most recent cancellation without removing it
+    if (!cancellationHistory.peekLastCancellation(restoredReservation)) {
+        cout << "No cancelled reservations to restore." << endl;
+    }
+    else {
+        string restoredResourceId = restoredReservation.getResourceId();
 
-                reservationManager.addReservation(restoredReservation);
+        int resourceIndex =
+            linearSearchResource(resources, restoredResourceId);
 
-                string restoredResourceId =
-                    restoredReservation.getResourceId();
-
-                int resourceIndex =
-                    linearSearchResource(resources, restoredResourceId);
-
-                if (resourceIndex != -1) {
-                    resources[resourceIndex].setAvailable(false);
-                }
-
-                cout << "Most recently cancelled reservation restored."
-                     << endl;
-            }
-            else {
-                cout << "No cancelled reservations to restore." << endl;
-            }
+        if (resourceIndex == -1) {
+            cout << "Cannot restore: Resource no longer exists." << endl;
         }
+        else if (!resources[resourceIndex].isItAvailable()) {
+            cout << "Cannot restore: Resource is already reserved." << endl;
+        }
+        else if (!reservationManager.isReservationIdUnique(
+                     restoredReservation.getReservationId())) {
+            cout << "Cannot restore: Reservation ID already exists." << endl;
+        }
+        else {
+            // Resource is available and reservation ID is unique
+            reservationManager.addReservation(restoredReservation);
+            resources[resourceIndex].setAvailable(false);
+
+            // Remove the cancellation from history after restoring
+            Reservation removedReservation;
+            cancellationHistory.restoreLastCancellation(removedReservation);
+
+            cout << "Most recently cancelled reservation restored." << endl;
+        }
+    }
+}
 
         // LINEAR SEARCH
 
@@ -320,12 +332,14 @@ int main() {
 	// EXIT
 
 	else if (choice == 15) {
-    	cout << "Exiting program." << endl;
+    	printMostRequested(resources);
 }
-
-        else {
-            cout << "Invalid choice. Please enter 1-15." << endl;
-        }
+	else if (choice == 16) {
+    	     cout << "Exiting program." << endl;
+}
+	else {
+    	     cout << "Invalid choice. Please enter 1-16." << endl;
+}
     }
 
     return 0;
