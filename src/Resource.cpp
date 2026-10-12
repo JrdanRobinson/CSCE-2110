@@ -199,4 +199,3 @@ void mergeSortResources(vector<Resource>& resourceList,
     // Merge the two sorted halves
     mergeResources(resourceList, left, middle, right);
 }
-}
