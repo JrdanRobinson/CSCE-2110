@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <limits>
 
 #include "Resource.h"
 #include "WaitingList.h"
@@ -21,7 +22,7 @@ int main() {
 
     int choice = 0;
 
-    while (choice != 11) {
+    while (choice != 13) {
 
         cout << "\n===== Campus Resource Reservation System =====" << endl;
         cout << "1. Display All Resources" << endl;
@@ -34,12 +35,24 @@ int main() {
         cout << "8. Display Waiting List" << endl;
         cout << "9. Display Cancellation History" << endl;
         cout << "10. Undo Last Cancellation" << endl;
-        cout << "11. Exit" << endl;
+        cout << "11. Search Resource by ID" << endl;
+        cout << "12. Sort Resources by Name" << endl;
+        cout << "13. Exit" << endl;
         cout << "Enter choice: ";
 
-        cin >> choice;
+        if (!(cin >> choice)) {
+            if (cin.eof()) {
+                break;
+            }
 
-        //RESOURCE MANAGEMENT
+            cout << "Invalid input. Please enter a number." << endl;
+            cin.clear();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            continue;
+        }
+
+        // RESOURCE MANAGEMENT
+
         if (choice == 1) {
 
             cout << "\n===== All Resources =====" << endl;
@@ -52,7 +65,7 @@ int main() {
             showAvailabilityCount(resources);
         }
 
-        // RESERVATION MANAGEMENT 
+        // RESERVATION MANAGEMENT
 
         else if (choice == 3) {
 
@@ -65,9 +78,7 @@ int main() {
             cout << "Reservation ID: ";
             cin >> reservationId;
 
-            // Check if reservation ID already exists
             if (!reservationManager.isReservationIdUnique(reservationId)) {
-
                 cout << "Error: Reservation ID already exists." << endl;
                 continue;
             }
@@ -76,34 +87,21 @@ int main() {
             cin >> studentId;
 
             cout << "Student Name: ";
-            cin.ignore();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             getline(cin, studentName);
 
             cout << "Resource ID: ";
             cin >> resourceId;
 
-            // Find requested resource
-            Resource* selectedResource = nullptr;
+            // Find resource using Linear Search
+            int resourceIndex = linearSearchResource(resources, resourceId);
 
-            for (int i = 0; i < resources.size(); i++) {
-
-                if (resources[i].getID() == resourceId) {
-
-                    selectedResource = &resources[i];
-                    break;
-                }
-            }
-
-            // Check if resource exists
-            if (selectedResource == nullptr) {
-
+            if (resourceIndex == -1) {
                 cout << "Error: Resource ID does not exist." << endl;
                 continue;
             }
 
-            // Check if resource is available
-            if (!selectedResource->isItAvailable()) {
-
+            if (!resources[resourceIndex].isItAvailable()) {
                 cout << "Error: Resource is currently unavailable." << endl;
                 continue;
             }
@@ -119,11 +117,8 @@ int main() {
                 reservationDate
             );
 
-            // Add reservation to linked list
             reservationManager.addReservation(reservation);
-
-            // Mark resource as unavailable
-            selectedResource->setAvailable(false);
+            resources[resourceIndex].setAvailable(false);
 
             cout << "Reservation created successfully." << endl;
         }
@@ -136,38 +131,27 @@ int main() {
             cout << "Enter Reservation ID to cancel: ";
             cin >> reservationId;
 
-            // Find reservation before deleting it
             if (reservationManager.findReservation(
-                    reservationId,
-                    cancelledReservation)) {
+                    reservationId, cancelledReservation)) {
 
-                // Remove reservation from active linked list
                 if (reservationManager.cancelReservation(reservationId)) {
 
-                    // Store cancelled reservation in stack
-                    cancellationHistory.addCancellation(
-                        cancelledReservation
-                    );
+                    cancellationHistory.addCancellation(cancelledReservation);
 
-                    // Make resource available again
                     string cancelledResourceId =
                         cancelledReservation.getResourceId();
 
-                    for (int i = 0; i < resources.size(); i++) {
+                    int resourceIndex =
+                        linearSearchResource(resources, cancelledResourceId);
 
-                        if (resources[i].getID() ==
-                            cancelledResourceId) {
-
-                            resources[i].setAvailable(true);
-                            break;
-                        }
+                    if (resourceIndex != -1) {
+                        resources[resourceIndex].setAvailable(true);
                     }
 
                     cout << "Reservation cancelled." << endl;
                 }
             }
             else {
-
                 cout << "Reservation not found." << endl;
             }
         }
@@ -175,11 +159,10 @@ int main() {
         else if (choice == 5) {
 
             cout << "\n===== Active Reservations =====" << endl;
-
             reservationManager.displayReservations();
         }
 
-        //  WAITING LIST MANAGEMENT 
+        // WAITING LIST MANAGEMENT
 
         else if (choice == 6) {
 
@@ -189,7 +172,7 @@ int main() {
             string resourceType;
 
             cout << "Student Name: ";
-            cin.ignore();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             getline(cin, studentName);
 
             cout << "Student ID: ";
@@ -200,7 +183,6 @@ int main() {
 
             cout << "Resource Type "
                  << "(Laptop, Calculator, Mouse, StudyRoom): ";
-
             cin >> resourceType;
 
             waitRequest request(
@@ -221,16 +203,13 @@ int main() {
 
             cout << "Resource Type "
                  << "(Laptop, Calculator, Mouse, StudyRoom): ";
-
             cin >> resourceType;
 
             waitRequest nextStudent("", "", "", "");
 
             if (waitList.removeNext(resourceType, nextStudent)) {
-
                 cout << nextStudent.getName()
-                     << " removed from the waiting list."
-                     << endl;
+                     << " removed from the waiting list." << endl;
             }
         }
 
@@ -240,18 +219,16 @@ int main() {
 
             cout << "Resource Type "
                  << "(Laptop, Calculator, Mouse, StudyRoom): ";
-
             cin >> resourceType;
 
             waitList.displayWaitingList(resourceType);
         }
 
-        // CANCELLATION HISTORY 
+        // CANCELLATION HISTORY
 
         else if (choice == 9) {
 
             cout << "\n===== Cancellation History =====" << endl;
-
             cancellationHistory.displayCancellationHistory();
         }
 
@@ -262,45 +239,73 @@ int main() {
             if (cancellationHistory.restoreLastCancellation(
                     restoredReservation)) {
 
-                // Restore reservation to linked list
-                reservationManager.addReservation(
-                    restoredReservation
-                );
+                reservationManager.addReservation(restoredReservation);
 
-                // Mark resource unavailable again
                 string restoredResourceId =
                     restoredReservation.getResourceId();
 
-                for (int i = 0; i < resources.size(); i++) {
+                int resourceIndex =
+                    linearSearchResource(resources, restoredResourceId);
 
-                    if (resources[i].getID() ==
-                        restoredResourceId) {
-
-                        resources[i].setAvailable(false);
-                        break;
-                    }
+                if (resourceIndex != -1) {
+                    resources[resourceIndex].setAvailable(false);
                 }
 
                 cout << "Most recently cancelled reservation restored."
                      << endl;
             }
             else {
-
-                cout << "No cancelled reservations to restore."
-                     << endl;
+                cout << "No cancelled reservations to restore." << endl;
             }
         }
 
-        // EXIT 
+        // LINEAR SEARCH
 
         else if (choice == 11) {
 
+            string resourceId;
+
+            cout << "\n===== Search Resource by ID =====" << endl;
+            cout << "Enter Resource ID: ";
+            cin >> resourceId;
+
+            int resourceIndex = linearSearchResource(resources, resourceId);
+
+            if (resourceIndex == -1) {
+                cout << "Resource not found." << endl;
+            }
+            else {
+                cout << "\nResource found:" << endl;
+                resources[resourceIndex].display();
+            }
+        }
+
+        // MERGE SORT
+
+        else if (choice == 12) {
+
+            cout << "\n===== Sort Resources by Name =====" << endl;
+
+            if (resources.empty()) {
+                cout << "No resources available to sort." << endl;
+            }
+            else {
+                mergeSortResources(resources, 0,
+                                   static_cast<int>(resources.size()) - 1);
+
+                cout << "\nResources sorted alphabetically:" << endl;
+                displayAllResources(resources);
+            }
+        }
+
+        // EXIT
+
+        else if (choice == 13) {
             cout << "Exiting program." << endl;
         }
 
         else {
-
-            cout << "Invalid choice. Please enter 1-11." << endl;
+            cout << "Invalid choice. Please enter 1-13." << endl;
         }
     }
 
