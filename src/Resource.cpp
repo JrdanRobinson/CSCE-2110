@@ -26,7 +26,7 @@ void Resource::setAvailable(bool status) {
     isAvailable = status;
 }
 
-// Load resources from a text file into a vector
+// Load resources from a text file
 vector<Resource> loadResources(string filename) {
     vector<Resource> resourceList;
     ifstream file(filename);
@@ -108,8 +108,8 @@ void showAvailabilityCount(vector<Resource>& resourceList) {
 
 // ===== LINEAR SEARCH =====
 
-// Search through resources one at a time by ID.
-// Return the matching index, or -1 if no resource matches.
+// Search for a resource by its ID
+// Returns the index if found, otherwise -1
 int linearSearchResource(vector<Resource>& resourceList, string resourceID) {
 
     for (int i = 0; i < resourceList.size(); i++) {
@@ -120,4 +120,83 @@ int linearSearchResource(vector<Resource>& resourceList, string resourceID) {
     }
 
     return -1;
+}
+
+// ===== MERGE SORT =====
+
+// Merge two sorted halves of the resource list
+void mergeResources(vector<Resource>& resourceList,
+                    int left, int middle, int right) {
+
+    int leftSize = middle - left + 1;
+    int rightSize = right - middle;
+
+    vector<Resource> leftHalf;
+    vector<Resource> rightHalf;
+
+    // Copy resources into the left half
+    for (int i = 0; i < leftSize; i++) {
+        leftHalf.push_back(resourceList[left + i]);
+    }
+
+    // Copy resources into the right half
+    for (int j = 0; j < rightSize; j++) {
+        rightHalf.push_back(resourceList[middle + 1 + j]);
+    }
+
+    int i = 0;
+    int j = 0;
+    int k = left;
+
+    // Compare resource names and merge alphabetically
+    while (i < leftSize && j < rightSize) {
+
+        if (leftHalf[i].getName() <= rightHalf[j].getName()) {
+            resourceList[k] = leftHalf[i];
+            i++;
+        }
+        else {
+            resourceList[k] = rightHalf[j];
+            j++;
+        }
+
+        k++;
+    }
+
+    // Copy any remaining resources from the left half
+    while (i < leftSize) {
+        resourceList[k] = leftHalf[i];
+        i++;
+        k++;
+    }
+
+    // Copy any remaining resources from the right half
+    while (j < rightSize) {
+        resourceList[k] = rightHalf[j];
+        j++;
+        k++;
+    }
+}
+
+// Recursively divide and sort resources by name
+void mergeSortResources(vector<Resource>& resourceList,
+                        int left, int right) {
+
+    // Stop when there is only one resource or none
+    if (left >= right) {
+        return;
+    }
+
+    // Find the middle position
+    int middle = left + (right - left) / 2;
+
+    // Sort the left half
+    mergeSortResources(resourceList, left, middle);
+
+    // Sort the right half
+    mergeSortResources(resourceList, middle + 1, right);
+
+    // Merge the two sorted halves
+    mergeResources(resourceList, left, middle, right);
+}
 }
