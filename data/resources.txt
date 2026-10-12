@@ -1,4 +1,3 @@
-
 LAP01,Dell Laptop,Laptop,1
 LAP02,Dell Laptop,Laptop,1
 LAP03,Dell Laptop,Laptop,1
