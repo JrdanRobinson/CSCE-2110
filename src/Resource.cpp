@@ -1,33 +1,33 @@
-#include "Resource.h" // Include the class declaration
-#include <sstream>    // For splitting strings by comma
-#include <fstream>    // For opening files
-#include <iostream>   // For console output
+#include "Resource.h"
+#include <sstream>
+#include <fstream>
+#include <iostream>
 #include <string>
 #include <vector>
+
 using namespace std;
 
-// Constructor (takes values given to it and save them into this object)
-Resource::Resource(string id, string name, string type, bool avail){
+// Constructor
+Resource::Resource(string id, string name, string type, bool avail) {
     resourceID = id;
     resourceName = name;
     resourceType = type;
     isAvailable = avail;
 }
 
-// Getter functions (just return the value)
+// Getter functions
 string Resource::getID() { return resourceID; }
 string Resource::getName() { return resourceName; }
 string Resource::getType() { return resourceType; }
 bool Resource::isItAvailable() { return isAvailable; }
 
-
 // Update availability status
-void Resource::setAvailable(bool status){
+void Resource::setAvailable(bool status) {
     isAvailable = status;
 }
 
-// Load resources from a text file into a list
-vector<Resource> loadResources(string filename){
+// Load resources from a text file into a vector
+vector<Resource> loadResources(string filename) {
     vector<Resource> resourceList;
     ifstream file(filename);
 
@@ -37,6 +37,7 @@ vector<Resource> loadResources(string filename){
     }
 
     string line;
+
     while (getline(file, line)) {
         stringstream newLine(line);
         string id, name, type, available;
@@ -46,47 +47,54 @@ vector<Resource> loadResources(string filename){
         getline(newLine, type, ',');
         getline(newLine, available, ',');
 
-        bool avail = (available == "1"); // "1" means available
+        bool avail = (available == "1");
 
         Resource newFile(id, name, type, avail);
         resourceList.push_back(newFile);
     }
+
     file.close();
     return resourceList;
 }
 
-// this function prints one resource's information to the screen.
+// Display one resource
 void Resource::display() {
-    cout << resourceID << " | " << resourceName << " | " << resourceType
-         << " | " << (isAvailable ? "Available" : "In Use") << endl;
+    cout << resourceID << " | "
+         << resourceName << " | "
+         << resourceType << " | "
+         << (isAvailable ? "Available" : "In Use")
+         << endl;
 }
 
-// Prints every resource
-void displayAllResources(vector<Resource>& resourceList){
-    for (int i = 0; i < resourceList.size(); i++){
+// Display all resources
+void displayAllResources(vector<Resource>& resourceList) {
+    for (int i = 0; i < resourceList.size(); i++) {
         resourceList[i].display();
     }
 }
 
-// counts how many of each resource type are currently available, and prints.
-void showAvailabilityCount(vector<Resource>& resourceList){
+// Count available resources by type
+void showAvailabilityCount(vector<Resource>& resourceList) {
     int laptopCount = 0;
     int calculatorCount = 0;
     int mouseCount = 0;
     int studyRoomCount = 0;
 
-    for (int i = 0; i < resourceList.size(); i++){
+    for (int i = 0; i < resourceList.size(); i++) {
         string type = resourceList[i].getType();
         bool avail = resourceList[i].isItAvailable();
 
         if (avail) {
-            if (type == "Laptop"){
+            if (type == "Laptop") {
                 laptopCount++;
-            } else if (type == "Calculator") {
+            }
+            else if (type == "Calculator") {
                 calculatorCount++;
-            } else if (type == "Mouse") {
+            }
+            else if (type == "Mouse") {
                 mouseCount++;
-            } else if (type == "StudyRoom") {
+            }
+            else if (type == "StudyRoom") {
                 studyRoomCount++;
             }
         }
@@ -96,4 +104,20 @@ void showAvailabilityCount(vector<Resource>& resourceList){
     cout << "Calculator: " << calculatorCount << " available" << endl;
     cout << "Mouse     : " << mouseCount << " available" << endl;
     cout << "StudyRoom : " << studyRoomCount << " available" << endl;
+}
+
+// ===== LINEAR SEARCH =====
+
+// Search through resources one at a time by ID.
+// Return the matching index, or -1 if no resource matches.
+int linearSearchResource(vector<Resource>& resourceList, string resourceID) {
+
+    for (int i = 0; i < resourceList.size(); i++) {
+
+        if (resourceList[i].getID() == resourceID) {
+            return i;
+        }
+    }
+
+    return -1;
 }
