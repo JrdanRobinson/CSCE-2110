@@ -22,7 +22,7 @@ int main() {
 
     int choice = 0;
 
-    while (choice != 12) {
+    while (choice != 13) {
 
         cout << "\n===== Campus Resource Reservation System =====" << endl;
         cout << "1. Display All Resources" << endl;
@@ -36,10 +36,15 @@ int main() {
         cout << "9. Display Cancellation History" << endl;
         cout << "10. Undo Last Cancellation" << endl;
         cout << "11. Search Resource by ID" << endl;
-        cout << "12. Exit" << endl;
+        cout << "12. Sort Resources by Name" << endl;
+        cout << "13. Exit" << endl;
         cout << "Enter choice: ";
 
         if (!(cin >> choice)) {
+            if (cin.eof()) {
+                break;
+            }
+
             cout << "Invalid input. Please enter a number." << endl;
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -82,13 +87,13 @@ int main() {
             cin >> studentId;
 
             cout << "Student Name: ";
-            cin.ignore();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             getline(cin, studentName);
 
             cout << "Resource ID: ";
             cin >> resourceId;
 
-            // Use Linear Search to find the resource
+            // Find resource using Linear Search
             int resourceIndex = linearSearchResource(resources, resourceId);
 
             if (resourceIndex == -1) {
@@ -113,7 +118,6 @@ int main() {
             );
 
             reservationManager.addReservation(reservation);
-
             resources[resourceIndex].setAvailable(false);
 
             cout << "Reservation created successfully." << endl;
@@ -128,19 +132,15 @@ int main() {
             cin >> reservationId;
 
             if (reservationManager.findReservation(
-                    reservationId,
-                    cancelledReservation)) {
+                    reservationId, cancelledReservation)) {
 
                 if (reservationManager.cancelReservation(reservationId)) {
 
-                    cancellationHistory.addCancellation(
-                        cancelledReservation
-                    );
+                    cancellationHistory.addCancellation(cancelledReservation);
 
                     string cancelledResourceId =
                         cancelledReservation.getResourceId();
 
-                    // Find resource using Linear Search
                     int resourceIndex =
                         linearSearchResource(resources, cancelledResourceId);
 
@@ -172,7 +172,7 @@ int main() {
             string resourceType;
 
             cout << "Student Name: ";
-            cin.ignore();
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             getline(cin, studentName);
 
             cout << "Student ID: ";
@@ -209,8 +209,7 @@ int main() {
 
             if (waitList.removeNext(resourceType, nextStudent)) {
                 cout << nextStudent.getName()
-                     << " removed from the waiting list."
-                     << endl;
+                     << " removed from the waiting list." << endl;
             }
         }
 
@@ -240,14 +239,11 @@ int main() {
             if (cancellationHistory.restoreLastCancellation(
                     restoredReservation)) {
 
-                reservationManager.addReservation(
-                    restoredReservation
-                );
+                reservationManager.addReservation(restoredReservation);
 
                 string restoredResourceId =
                     restoredReservation.getResourceId();
 
-                // Find resource using Linear Search
                 int resourceIndex =
                     linearSearchResource(resources, restoredResourceId);
 
@@ -259,8 +255,7 @@ int main() {
                      << endl;
             }
             else {
-                cout << "No cancelled reservations to restore."
-                     << endl;
+                cout << "No cancelled reservations to restore." << endl;
             }
         }
 
@@ -285,18 +280,35 @@ int main() {
             }
         }
 
-        // EXIT
+        // MERGE SORT
 
         else if (choice == 12) {
 
+            cout << "\n===== Sort Resources by Name =====" << endl;
+
+            if (resources.empty()) {
+                cout << "No resources available to sort." << endl;
+            }
+            else {
+                mergeSortResources(resources, 0,
+                                   static_cast<int>(resources.size()) - 1);
+
+                cout << "\nResources sorted alphabetically:" << endl;
+                displayAllResources(resources);
+            }
+        }
+
+        // EXIT
+
+        else if (choice == 13) {
             cout << "Exiting program." << endl;
         }
 
         else {
-
-            cout << "Invalid choice. Please enter 1-12." << endl;
+            cout << "Invalid choice. Please enter 1-13." << endl;
         }
     }
 
     return 0;
+}
 }
