@@ -147,15 +147,49 @@ cout << "Reservation created successfully." << endl;
 
                     int resourceIndex =
                         linearSearchResource(resources, cancelledResourceId);
+	if (resourceIndex != -1) {
+    resources[resourceIndex].setAvailable(true);
+}
 
-                    if (resourceIndex != -1) {
-                        resources[resourceIndex].setAvailable(true);
-                    }
+cout << "Reservation cancelled." << endl;
 
-                    cout << "Reservation cancelled." << endl;
-                }
-            }
-            else {
+// Assign the freed resource to the next waiting student
+	if (resourceIndex != -1 && !waitList.isEmpty(cancelledResourceId)) {
+
+    waitRequest nextStudent("", "", "", "");
+
+    if (waitList.removeNext(cancelledResourceId, nextStudent)) {
+
+        // Find a unique ID for the automatic reservation
+        int autoNumber = 1;
+        string newId;
+
+        do {
+            newId = "AUTO" + to_string(autoNumber);
+            autoNumber++;
+        } while (!reservationManager.isReservationIdUnique(newId));
+
+        Reservation newReservation(
+            newId,
+            nextStudent.getId(),
+            nextStudent.getName(),
+            cancelledResourceId,
+            "Auto-Assigned"
+        );
+
+        reservationManager.addReservation(newReservation);
+        resources[resourceIndex].setAvailable(false);
+
+        cout << nextStudent.getName()
+             << " automatically received "
+             << cancelledResourceId
+             << " (Reservation ID: " << newId << ")." << endl;
+    }
+}	
+		}
+	   }
+		 
+           else {
                 cout << "Reservation not found." << endl;
             }
         }
